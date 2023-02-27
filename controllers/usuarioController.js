@@ -1,6 +1,6 @@
 import { check, validationResult } from "express-validator";
 import Usuario from "../models/Usuario.js";
-import { generarId } from'../helpers/tokens.js'
+import { generarId } from "../helpers/tokens.js";
 const formularioLogin = (req, res) => {
   res.render("auth/login", {
     pagina: "Iniciar Sesión",
@@ -65,8 +65,13 @@ const registrar = async (req, res) => {
     nombre,
     email,
     password,
-    token:generarId()
-  })
+    token: generarId(),
+  });
+  // Mostar mensaje de confirmación
+  res.render("templates/mensaje", {
+    pagina: "Cuenta Creada Correctamente",
+    mensaje: "Hemos Enviado un Email de Confirmacion, presiona en el enlace",
+  });
 };
 
 const formularioOlvidePassword = (req, res) => {
