@@ -89,7 +89,7 @@ const confirmar = async (req, res) => {
 
   //Verificar si el token es valido
   const usuario = await Usuario.findOne({ where: { token } });
-  //Confirmar la cuenta
+
   if (!usuario) {
     return res.render("auth/confirmar-cuenta", {
       pagina: "Error al confirmar tu cuenta",
@@ -97,6 +97,14 @@ const confirmar = async (req, res) => {
       error: true,
     });
   }
+  //Confirmar la cuenta
+  usuario.token = null;
+  usuario.confirmado = true;
+  await usuario.save();
+  return res.render("auth/confirmar-cuenta", {
+    pagina: "Cuenta confirmada",
+    mensaje: "La cuenta se confirmo Correctamente",
+  });
 };
 
 const formularioOlvidePassword = (req, res) => {
