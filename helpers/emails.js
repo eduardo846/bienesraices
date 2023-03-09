@@ -9,21 +9,52 @@ const emailRegistro = async (datos) => {
       pass: process.env.EMAIL_PASS,
     },
   });
-  const { email, nombre, token }= datos
+  const { email, nombre, token } = datos;
 
   //Enviar el email
   await transport.sendMail({
-    from: 'BienesRaices.com',
+    from: "BienesRaices.com",
     to: email,
-    subject:'Confirma tu cuenta en BienesRaices.com',
-    text:'Confirma tu cuenta en BienesRaices.com',
-    html:`
+    subject: "Confirma tu cuenta en BienesRaices.com",
+    text: "Confirma tu cuenta en BienesRaices.com",
+    html: `
     <p>Hola ${nombre}, comprueba tu cuenta en BienesRaices.com</p>
     <p>Tu cuenta ya esta lista, solo debes confirmarla en el siguientes enlace:
-    <a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 3000}/auth/confirmar/${token}">CONFIRMAR CUENTA</a></p>
+    <a href="${process.env.BACKEND_URL}:${
+      process.env.PORT ?? 3000
+    }/auth/confirmar/${token}">CONFIRMAR CUENTA</a></p>
 
     <p> Si no creastes esta cuenta puedes ignorar el mensaje</p>
-    `
-  })
+    `,
+  });
 };
-export { emailRegistro };
+
+const emailOlvidePassword = async (datos) => {
+  const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+  const { email, nombre, token } = datos;
+
+  //Enviar el email
+  await transport.sendMail({
+    from: "BienesRaices.com",
+    to: email,
+    subject: "Establece tu password en BienesRaices.com",
+    text: "Establece tu password en BienesRaices.com",
+    html: `
+    <p>Hola ${nombre}, has solicitado reestablecer tu password en BienesRaices.com</p>
+    <p>Sigue el siguiente enlace para generar un password nuevo:
+    <a href="${process.env.BACKEND_URL}:${
+      process.env.PORT ?? 3000
+    }/auth/olvide-password/${token}">Reestablecer Password</a></p>
+
+    <p> Si tu no solicitastes el cambio de password, puedes ignorar el mensaje</p>
+    `,
+  });
+};
+export { emailRegistro, emailOlvidePassword };
