@@ -167,8 +167,14 @@ const comprobarToken = async (req, res) => {
     });
   }
   // Mostrar formulario para verificar el password
+  res.render("auth/reset-password", {
+    pagina: "Restablece Tu Password",
+    csrfToken: req.csrfToken(),
+  });
 };
-const nuevoPassword = (req, res) => {};
+const nuevoPassword = (req, res) => {
+  console.log("Guardando password");
+};
 
 export {
   formularioLogin,
