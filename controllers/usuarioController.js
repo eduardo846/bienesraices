@@ -3,11 +3,33 @@ import bcrypt from "bcrypt";
 import Usuario from "../models/Usuario.js";
 import { generarId } from "../helpers/tokens.js";
 import { emailRegistro, emailOlvidePassword } from "../helpers/emails.js";
+
 const formularioLogin = (req, res) => {
   res.render("auth/login", {
     pagina: "Iniciar Sesión",
+    csrfToken: req.csrfToken(),
   });
 };
+const autenticar = async (req, res) => {
+  // Validación
+  await check("email")
+    .isEmail()
+    .withMessage("El Email es obligatorio")
+    .run(req);
+  await check("password")
+    .notEmpty()
+    .withMessage("El Password es obligatorio")
+    .run(req);
+  let resultado = validationResult(req);
+  if (!resultado.isEmpty()) {
+    return res.render("auth/login", {
+      pagina: "Iniciar Sesion",
+      csrfToken: req.csrfToken(),
+      errores: resultado.array()
+    });
+  }
+};
+
 const formularioRegistro = (req, res) => {
   res.render("auth/registro", {
     pagina: "Crear Cuenta",
@@ -198,14 +220,15 @@ const nuevoPassword = async (req, res) => {
 
   await usuario.save();
 
-  res.render('auth/confirmar -cuenta',{
-    pagina: 'Password Reestablecido',
-    mensaje: 'El Password se guardó correctamente'
-  })
+  res.render("auth/confirmar -cuenta", {
+    pagina: "Password Reestablecido",
+    mensaje: "El Password se guardó correctamente",
+  });
 };
 
 export {
   formularioLogin,
+  autenticar,
   formularioRegistro,
   formularioOlvidePassword,
   registrar,
