@@ -58,6 +58,13 @@ const autenticar = async (req, res) => {
   // Autenticar el usuario
   const token = generarJWT({id:usuario.id, nombre: usuario.nombre})
   console.log(token);
+
+// Almacenar en un cookies
+return res.cookie('_token',token, {
+  httpOnly: true,
+  //secure:true
+}).redirect('/mis-propiedades')
+
 };
 
 const formularioRegistro = (req, res) => {
