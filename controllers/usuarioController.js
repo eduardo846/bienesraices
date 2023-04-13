@@ -1,5 +1,6 @@
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import Usuario from "../models/Usuario.js";
 import { generarId } from "../helpers/tokens.js";
 import { emailRegistro, emailOlvidePassword } from "../helpers/emails.js";
@@ -48,7 +49,7 @@ const autenticar = async (req, res) => {
     });
   }
   // Revisar el password
-  if(!usuario.verificarPassword(password)){
+  if (!usuario.verificarPassword(password)) {
     return res.render("auth/login", {
       pagina: "Iniciar Sesion",
       csrfToken: req.csrfToken(),
@@ -56,7 +57,18 @@ const autenticar = async (req, res) => {
     });
   }
   // Autenticar el usuario
-
+  const token = jwt.sign(
+    {
+      nombre: "juan",
+      empresa: "Codigo Con Juan",
+      tecnologia: "Node.js",
+    },
+    "palabra super secretaaaaa",
+    {
+      expiresIn: "1d",
+    }
+  );
+  console.log(token);
 };
 
 const formularioRegistro = (req, res) => {
