@@ -9,7 +9,7 @@ const Propiedad = db.define("propiedades", {
     primaryKey: true,
   },
   titulo: {
-    type: DateTypes.STRING(100),
+    type: DataTypes.STRING(100),
     allowNull: false,
   },
   descripcion: {
