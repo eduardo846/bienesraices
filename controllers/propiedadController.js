@@ -21,24 +21,26 @@ const crear = async (req, res) => {
     csrfToken: req.csrfToken(),
     categorias,
     precios,
+    datos: {}
   });
 };
-const guardar = async(req, res) => {
+const guardar = async (req, res) => {
   //validacion
   let resultado = validationResult(req);
 
   if (!resultado.isEmpty()) {
     const [categorias, precios] = await Promise.all([
       Categoria.findAll(),
-      Precio.findAll()
-    ])
+      Precio.findAll(),
+    ]);
     return res.render("propiedades/crear", {
       pagina: " Crear Propiedad",
       barra: true,
       csrfToken: req.csrfToken(),
       categorias,
       precios,
-      errores: resultado.array()
+      errores: resultado.array(),
+      datos: req.body,
     });
   }
 };
