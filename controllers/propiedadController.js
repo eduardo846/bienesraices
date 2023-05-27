@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import {Precio, Categoria, Propiedad } from '../models/index.js'
+import { Precio, Categoria, Propiedad } from "../models/index.js";
 const admin = (req, res) => {
   res.render("propiedades/admin", {
     pagina: "Mis propiedades",
@@ -20,7 +20,7 @@ const crear = async (req, res) => {
     csrfToken: req.csrfToken(),
     categorias,
     precios,
-    datos: {}
+    datos: {},
   });
 };
 const guardar = async (req, res) => {
@@ -42,10 +42,8 @@ const guardar = async (req, res) => {
       datos: req.body,
     });
   }
-  //Crear un registro 
-  const { titulo, descripcion, habitaciones, estacionamiento, wc, calle, lat, lng, precio: precioId, categoria: categoriaId} = req.body
- try {
-   const propiedadGuarda = await Propiedad.create({
+  //Crear un registro
+  const {
     titulo,
     descripcion,
     habitaciones,
@@ -54,12 +52,30 @@ const guardar = async (req, res) => {
     calle,
     lat,
     lng,
-    precioId,
-    categoriaId
-   })
- } catch (error) {
-  console.log(error)
- }
+    precio: precioId,
+    categoria: categoriaId,
+  } = req.body;
+  const { id: usuarioId } = req.usuario;
+  try {
+    const propiedadGuardada = await Propiedad.create({
+      titulo,
+      descripcion,
+      habitaciones,
+      estacionamiento,
+      wc,
+      calle,
+      lat,
+      lng,
+      precioId,
+      categoriaId,
+      usuarioId,
+      imagen: "",
+    });
+    const { id } = propiedadGuardada;
+    res.redirect(`/propiedades/agregar-imagen/${id}`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export { admin, crear, guardar };

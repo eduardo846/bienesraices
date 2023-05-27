@@ -5,9 +5,10 @@ import protegerRuta from "../middleware/protegerRuta.js";
 const router = express.Router();
 
 router.get("/mis-propiedades", protegerRuta,admin);
-router.get("/propiedades/crear", crear);
+router.get("/propiedades/crear", protegerRuta, crear);
 router.post(
   "/propiedades/crear",
+  protegerRuta,
   body("titulo").notEmpty().withMessage("El titulo del Anuncio es Obligatorio"),
   body("descripcion")
         .notEmpty().withMessage("La descripcion no puede ir vacia")
